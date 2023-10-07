@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.yupi</groupId>
     <artifactId>yuapi-client-sdk</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.4</version>
     <name>yuapi-client-sdk</name>
     <description>yuapi-client-sdk</description>
     <properties>

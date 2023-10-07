@@ -23,8 +23,10 @@ public class YuApiClientConfig {
 
     private String secretKey;
 
+    private String interfaceName;
+
     @Bean
     public YupiApiClient yuApiClient() {
-        return new YupiApiClient(secretKey, accessKey);
+        return new YupiApiClient(secretKey, accessKey, interfaceName);
     }
 }

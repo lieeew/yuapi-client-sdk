@@ -19,10 +19,13 @@ import java.util.Map;
 public class YupiApiClient {
     private final String secretKey;
     private final String accessKey;
+    private final String interfaceInfoName;
+    public static final String REMOTE_PORT = "http://localhost:8090";
 
-    public YupiApiClient(String secretKey, String accessKey) {
+    public YupiApiClient(String secretKey, String accessKey, String interfaceInfoName) {
         this.secretKey = secretKey;
         this.accessKey = accessKey;
+        this.interfaceInfoName = interfaceInfoName;
     }
 
     private Map<String, String> getResponseMap(String body) {
@@ -34,15 +37,15 @@ public class YupiApiClient {
         map.put("nonce", RandomUtil.randomNumbers(4));
         map.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         map.put("sign", SecretKeyUtils.getSign(body, secretKey));
+        map.put("interfaceInfoName", interfaceInfoName);
         return map;
     }
-
 
     public String getNameByGet(String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         // GET请求
-        String content = HttpUtil.get("http://localhost:8123/api/name/", map);
+        String content = HttpUtil.get(REMOTE_PORT + "/api", map);
         System.out.println("GET name = " + content);
         return content;
     }
@@ -51,14 +54,14 @@ public class YupiApiClient {
         // POST请求
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", name);
-        String result = HttpUtil.post("http://localhost:8123/api/name/", map);
+        String result = HttpUtil.post(REMOTE_PORT + "/api/name", map);
         System.out.println("POST result = " + result);
         return result;
     }
 
     public String getUsernameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
-        HttpResponse execute = HttpRequest.post("http://localhost:8123/api/name/user")
+        HttpResponse execute = HttpRequest.post(REMOTE_PORT + "/api/user")
                 // 添加请求头
                 .addHeaders(getResponseMap(json))
                 .body(json)
